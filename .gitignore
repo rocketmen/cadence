@@ -1,0 +1,5 @@
+# Claude Code — memory is local-only (backed up via cadence-private)
+.claude/memory/
+
+# Claude Code — local settings
+.claude/settings.local.json
