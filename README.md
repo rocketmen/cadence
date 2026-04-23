@@ -49,7 +49,7 @@ The full methodology is documented in `docs/methodology.md`.
 
 ## Project status
 
-Early development. Universal skills, methodology doc, and user-level CLAUDE.md template are functional and tested across multiple projects. Project templates and onboarding scripts are in progress.
+Universal skills, methodology doc, templates, and onboarding scripts are functional and tested across multiple projects.
 
 ## License
 
