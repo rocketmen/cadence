@@ -66,6 +66,8 @@ echo "Skills:"
 mkdir -p "$CLAUDE_HOME/skills"
 link "$REPO_DIR/skills/session-start" "$CLAUDE_HOME/skills/session-start"
 link "$REPO_DIR/skills/handover" "$CLAUDE_HOME/skills/handover"
+link "$REPO_DIR/skills/wrap-up" "$CLAUDE_HOME/skills/wrap-up"
+link "$REPO_DIR/skills/next-prompt" "$CLAUDE_HOME/skills/next-prompt"
 
 echo ""
 echo "Done."

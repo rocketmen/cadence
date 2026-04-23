@@ -1,13 +1,11 @@
 ---
-name: handover
-description: End a session with work-in-progress. Verifies clean state, updates memory and docs, captures agreed-but-unstarted scope, produces big-picture comments, and generates an opening prompt for the next fresh session. Universal — works with any project that has a CLAUDE.md and memory setup. User-invoked.
+name: wrap-up
+description: Close a session cleanly without generating an opening prompt. Verifies clean state, updates memory and docs, captures agreed-but-unstarted scope, produces big-picture comments. Use /handover if you also want an opening prompt for the next session. Universal — works with any project that has a CLAUDE.md and memory setup. User-invoked.
 ---
 
-# /handover
+# /wrap-up
 
-Run this at the end of a session when work will continue in a fresh session on this project. Goal: zero information loss across the session boundary. Docs and memory carry durable facts; the opening prompt carries ephemeral context.
-
-For partial use: `/wrap-up` runs steps 1–5 only (no opening prompt — use when the next work is on a different project). `/next-prompt` runs step 6 only (use when the session is already wrapped up but you need a prompt).
+Run this at the end of a session when you want to close cleanly but don't need an opening prompt for the next session. For the full handover (wrap-up + opening prompt), use `/handover` instead.
 
 Execute the full protocol and present the results. User can skip or modify any step.
 
@@ -24,8 +22,8 @@ Run gates before anything else. The next session must start from a known-good st
 3. `git status`
 4. `git log --oneline -5`
 
-- If uncommitted changes exist: **ask** the user whether to commit, stash, or leave them. Capture the outcome in the opening prompt. Never commit without explicit permission.
-- If tests or lint fail: fix before handing over.
+- If uncommitted changes exist: **ask** the user whether to commit, stash, or leave them. Never commit without explicit permission.
+- If tests or lint fail: fix before wrapping up.
 
 ## 2. Update memory files
 
@@ -58,26 +56,14 @@ Write a short section covering:
 
 The user decides what to pass forward. Not everything here needs to reach the next Claude — some is for the user's own judgment.
 
-## 6. Generate opening prompt
-
-A copy-pasteable block the user gives the next fresh session. Structure:
-
-1. **Orientation ask** — _"Summarize the project from CLAUDE.md + docs + memory."_ Forces the new session to read durable artifacts before acting.
-2. **Git state snapshot** — branch, sync status, latest commit (hash + subject). Saves the next session a tool call.
-3. **This session's task** — the agreed next-session scope, concrete enough that the new session can plan without re-deriving. Include file estimates, design constraints, anything surfaced in prior discussion.
-4. **Execution ask** — _"Draft a formal plan"_ or _"Execute phase X"_, depending on whether the plan is already approved.
-
-The prompt must be self-contained. A new Claude reading only this prompt + auto-loaded CLAUDE.md + memory should have everything needed to start working. No implicit references to "what we discussed earlier".
-
 ## When to run
 
-- User says "let's start a new session", "time to hand over", or similar
-- Claude flags a natural handover seam (commit boundary, sub-task complete, topic shift) and user approves
+- Session is ending but the next work is on a different project (no opening prompt needed)
+- Work is complete — session closes cleanly, no continuation planned
 - User's discretion at any time
 
 ## Anti-patterns
 
-- **Don't dump raw conversation history into the opening prompt.** It's a curated summary, not a transcript.
 - **Don't commit without explicit permission.** Always ask first.
-- **Don't assume the next session remembers anything.** Every piece of context must be in docs, memory, or the opening prompt.
+- **Don't assume the next session remembers anything.** Every piece of context must be in docs or memory.
 - **Don't skip verify.** A broken build discovered by the next session wastes its first 10 minutes diagnosing something this protocol should have caught.

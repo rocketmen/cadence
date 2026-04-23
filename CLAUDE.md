@@ -23,7 +23,7 @@ Two repos:
 
 ## Rules
 
-1. **No personal details in this repo.** This repo goes public. No emails, API keys, personal paths in committed content. Personal config lives in cadence-private. `.claude/memory/` is gitignored and backed up via cadence-private.
+1. **No personal details in this repo.** This repo goes public. No emails, API keys, personal paths in committed content. Personal config lives in cadence-private. `.claude/memory/` is gitignored and backed up via cadence-private. Before staging, run `/validate-public` to read changed files end-to-end.
 2. **npx skills format.** Skills live at `skills/<name>/SKILL.md` with YAML frontmatter (`name`, `description`). Follow vercel-labs/skills conventions so `npx skills add rocketmen/cadence` works.
 3. **Skills must be project-agnostic.** Zero hardcoded project details. Skills read context from auto-loaded CLAUDE.md + MEMORY.md at runtime. If a skill needs project-specific behavior, that behavior belongs in the project's CLAUDE.md rules, not the skill.
 4. **Templates are starting points.** Every project customizes. Templates in `templates/` should be minimal and well-commented, not prescriptive.
@@ -56,13 +56,13 @@ Each project stores memory at `.claude/memory/` (version-controlled). A symlink 
 
 ### Skill design
 
-Universal skills (`/session-start`, `/handover`) work by reading whatever CLAUDE.md and MEMORY.md the harness auto-loads. They never reference specific projects, rules, or filenames. Project-specific behavior stays in each project's CLAUDE.md rules.
+Universal skills (`/session-start`, `/handover`, `/wrap-up`, `/next-prompt`) work by reading whatever CLAUDE.md and MEMORY.md the harness auto-loads. They never reference specific projects, rules, or filenames. Project-specific behavior stays in each project's CLAUDE.md rules.
 
 ## Workflow
 
 **RIPER-lite:** Research, Plan, Execute, Review. Plan mode for structural changes (new skill, methodology edits, template redesign).
 
-**Session lifecycle:** `/session-start` at fresh session start, `/handover` at session end with WIP. Both are cadence's own skills — the self-building loop.
+**Session lifecycle:** `/session-start` at fresh session start. At session end: `/handover` (wrap-up + opening prompt), `/wrap-up` (close without prompt), or `/next-prompt` (prompt only).
 
 **Subagents:** delegate broad exploration to `Explore`, multi-file planning to `Plan`.
 

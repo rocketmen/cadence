@@ -8,8 +8,10 @@ Cadence provides universal [Claude Code skills](https://docs.anthropic.com/en/do
 
 - **`/session-start`** — warms context at the beginning of a fresh session. Verifies auto-loaded config, takes a git snapshot, asks for intent, surfaces relevant memory, proposes a plan.
 - **`/handover`** — ends a session with work-in-progress. Verifies clean state, updates memory and docs, captures unstarted scope, generates an opening prompt for the next fresh session.
+- **`/wrap-up`** — closes a session cleanly without generating an opening prompt. Use when the next work is on a different project.
+- **`/next-prompt`** — generates an opening prompt for the next session. Use standalone when the session is already wrapped up.
 
-Both skills are project-agnostic. They read context from whatever `CLAUDE.md` and memory the harness auto-loads — no hardcoded project details.
+All skills are project-agnostic. They read context from whatever `CLAUDE.md` and memory the harness auto-loads — no hardcoded project details.
 
 ## Install
 

@@ -90,9 +90,11 @@ Four phases inside a work unit:
 ### Session bookends
 
 - **`/session-start`** at the beginning of a fresh session. See [`skills/session-start/SKILL.md`](../skills/session-start/SKILL.md).
-- **`/handover`** at the end of an in-progress session. See [`skills/handover/SKILL.md`](../skills/handover/SKILL.md).
+- **`/handover`** at the end of an in-progress session — wraps up and generates an opening prompt. See [`skills/handover/SKILL.md`](../skills/handover/SKILL.md).
+- **`/wrap-up`** — closes a session cleanly without generating an opening prompt. Use when the next work is on a different project. See [`skills/wrap-up/SKILL.md`](../skills/wrap-up/SKILL.md).
+- **`/next-prompt`** — generates an opening prompt only. Use when the session is already wrapped up. See [`skills/next-prompt/SKILL.md`](../skills/next-prompt/SKILL.md).
 
-Sessions without in-flight work end with: commit + cleanup. No handover ritual.
+Sessions without in-flight work end with: commit + cleanup. No wrap-up ritual needed.
 
 ### Context pressure
 
