@@ -23,6 +23,16 @@ Cross-project rules for <your-name> (<your-email>). Applies alongside per-projec
 
 6. **Structured summaries after work chunks.** After creating or modifying files, summarize: what changed (file paths), verifiable claims, design decisions, and what was deferred. Skip for pure discussion or research turns.
 
+## Cadence foundations
+
+These principles shape how every session should approach knowledge and tooling:
+
+- **CLAUDE.md is minimal rules + pointers.** Target ≤150 lines per project. Exclude standard practices, long explanations, duplicated content.
+- **Memory holds dynamic knowledge.** `MEMORY.md` is a pure index — no inline content. Typed files: `feedback_*`, `project_*`, `reference_*`, `user_*`.
+- **One home per piece of knowledge.** If something lives in two places, one is canonical and the other is a pointer. Drift kills long-lived setups.
+- **Skills formalize repeatable workflows.** 3+ recurrences before skill-ifying. Below that, prompts suffice.
+- **Hooks enforce the deterministic.** Don't automate judgment calls. Hooks are yes/no gates only.
+
 ## Collaboration flow
 
 - **Research → discuss → propose → decide.** I drive; you propose with leans at decision points.
@@ -32,6 +42,20 @@ Cross-project rules for <your-name> (<your-email>). Applies alongside per-projec
 
 ## Where knowledge lives
 
-- **Universal rules / my profile** → this file
-- **Project-specific rules, commands, architecture** → `<project>/CLAUDE.md`
-- **Dynamic per-project knowledge (feedback, project state, references)** → `.claude/memory/` (in-repo, symlinked from `~/.claude/projects/<path-hash>/memory/`)
+When new knowledge emerges, place it by type:
+
+1. Deterministic + automatable → hook (`.claude/settings.json`)
+2. Immutable project truth → project CLAUDE.md
+3. User feedback / validated choice → `.claude/memory/feedback_*.md`
+4. In-flight feature state → `.claude/memory/project_<feature>.md`
+5. External pointer → `.claude/memory/reference_*.md`
+6. User preference (cross-project) → this file
+7. Long-form pattern → `docs/<topic>.md`
+8. Repeatable workflow (≥3×) → `.claude/skills/<name>/SKILL.md`
+9. One-off fact → don't document
+
+## Anti-patterns
+
+- **Bloated CLAUDE.md** — over 200 lines is a smell; trim and link out
+- **Pasting orientation every session** — if repeated, it belongs in CLAUDE.md or a skill
+- **Ambiguous authorship** — make explicit whether Claude executes or the user does
