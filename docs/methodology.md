@@ -85,7 +85,7 @@ Four phases inside a work unit:
 1. **Research** — understand the problem. Read relevant code, check docs, study legacy counterparts if applicable.
 2. **Plan** — enter plan mode for any of: >3 files, new pattern, cross-repo change, no clear precedent. Multi-session work gets a `project_<feature>.md` memory file.
 3. **Execute** — implement per plan. Track with tasks.
-4. **Review** — run tests, lint, visual check for UI. Run `/review` for independent verification (correctness + compliance via `claude -p`). Propose commit; wait for user approval.
+4. **Review** — run tests, lint, visual check for UI. Run `/pre-commit` for independent verification (correctness + compliance via `claude -p`). Propose commit; wait for user approval.
 
 ### Session bookends
 
@@ -123,7 +123,7 @@ Verification happens after Execute, before committing. Four types of verificatio
 
 The worker session generates a structured review prompt and runs it through `claude -p` — a separate Claude process with fresh context. The reviewer loads CLAUDE.md and memory automatically but shares no conversation history with the worker. This escapes the author's confirmation bias: the worker spent 20 minutes convincing itself the code works; a fresh reader traces paths without those assumptions.
 
-The `/review` skill handles correctness + compliance in a single `claude -p` pass. See [`skills/review/SKILL.md`](../skills/review/SKILL.md).
+The `/pre-commit` skill handles correctness + compliance in a single `claude -p` pass. See [`skills/pre-commit/SKILL.md`](../skills/pre-commit/SKILL.md).
 
 **Cost model:** using a smaller model (e.g., Sonnet) for reviews keeps token cost negligible (~$0.01–0.05 per review). At this cost, running reviews on every commit is practical.
 
@@ -150,7 +150,7 @@ Phase B resembles a compliance check with research — the gap between design re
 
 ### Domain specificity
 
-Correctness and compliance checks are domain-specific. For coding projects: bugs, best practices, modern patterns, performance. For non-coding projects: different quality standards apply. The `/review` skill reads CLAUDE.md and adapts — project rules drive the compliance checklist, not hardcoded coding assumptions. The correctness checklist in the review prompt template is coding-oriented; non-code projects can skip or adapt it.
+Correctness and compliance checks are domain-specific. For coding projects: bugs, best practices, modern patterns, performance. For non-coding projects: different quality standards apply. The `/pre-commit` skill reads CLAUDE.md and adapts — project rules drive the compliance checklist, not hardcoded coding assumptions. The correctness checklist in the review prompt template is coding-oriented; non-code projects can skip or adapt it.
 
 ---
 

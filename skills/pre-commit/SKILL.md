@@ -1,9 +1,9 @@
 ---
-name: review
+name: pre-commit
 description: Independent code review before committing. Generates a structured review prompt covering correctness and compliance, runs it through claude -p for fresh-context verification. Universal — works with any project that has a CLAUDE.md. User-invoked or run at commit time.
 ---
 
-# /review
+# /pre-commit
 
 Run an independent review of current changes before committing. A separate Claude process (`claude -p`) reviews the code with fresh context — no shared conversation history, no author bias.
 
@@ -116,7 +116,7 @@ Re-review after fixes is optional — the user decides. Each re-review is a fres
 
 - Before every commit, at the "ready to stage and commit?" moment
 - After significant implementation work, before proposing the commit
-- User's discretion at any time via `/review`
+- User's discretion at any time via `/pre-commit`
 
 ## Configuration
 

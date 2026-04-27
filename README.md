@@ -10,7 +10,7 @@ Cadence provides universal [Claude Code skills](https://docs.anthropic.com/en/do
 - **`/handover`** — ends a session with work-in-progress. Verifies clean state, updates memory and docs, captures unstarted scope, generates an opening prompt for the next fresh session.
 - **`/wrap-up`** — closes a session cleanly without generating an opening prompt. Use when the next work is on a different project.
 - **`/next-prompt`** — generates an opening prompt for the next session. Use standalone when the session is already wrapped up.
-- **`/review`** — independent code review before committing. Generates a structured review prompt and runs it through `claude -p` for fresh-context verification.
+- **`/pre-commit`** — independent code review before committing. Generates a structured review prompt and runs it through `claude -p` for fresh-context verification.
 
 All skills are project-agnostic. They read context from whatever `CLAUDE.md` and memory the harness auto-loads — no hardcoded project details.
 
