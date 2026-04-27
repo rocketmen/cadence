@@ -1,6 +1,6 @@
 ---
 name: pre-commit
-description: Independent code review before committing. Generates a structured review prompt covering correctness and compliance, runs it through claude -p for fresh-context verification. Universal — works with any project that has a CLAUDE.md. User-invoked or run at commit time.
+description: Independent code review before committing. Generates structured review prompts covering correctness and compliance, runs them through claude -p for fresh-context verification. Splits multi-concern diffs into focused reviews. Universal — works with any project that has a CLAUDE.md. User-invoked or run at commit time.
 ---
 
 # /pre-commit
@@ -16,9 +16,32 @@ Collect the inputs the reviewer needs:
 3. Read the project's CLAUDE.md — specifically the **Rules** section. Each numbered rule becomes a compliance check item.
 4. Summarize the **intent** — what was implemented and why. Derive this from the conversation context. If unclear, ask the user in one sentence.
 
-## 2. Construct review prompt
+## 2. Assess and split
 
-Write the following template to `/tmp/cadence-review.md`, filling in the placeholders:
+Before constructing prompts, assess whether the diff should be reviewed as one unit or split by concern.
+
+**Split when:** the diff contains multiple distinct changes (e.g., a bug fix + a refactor + a new feature). The intent summary is the guide — if it has multiple numbered items or distinct topics, split along those lines.
+
+**Keep together when:** all changes serve a single concern, even across multiple files.
+
+**For each concern group, identify:**
+- The intent (one item from the overall intent)
+- The relevant files and their diffs
+- Whether repetitive changes across files can be summarized (e.g., "same 4-line guard added to 6 job files — verify the pattern is correct and consistently applied")
+
+## 3. Construct review prompts
+
+Generate one review prompt per concern group. Write each to a unique temp file:
+
+```bash
+/tmp/cadence-review-$(basename $PWD)-$$-01.md
+/tmp/cadence-review-$(basename $PWD)-$$-02.md
+# etc.
+```
+
+The `$$` (shell PID) ensures no collision with other sessions. For a single-concern review, just use `-01.md`.
+
+Each prompt uses this template:
 
 ```markdown
 # Code Review Request
@@ -27,15 +50,15 @@ You are reviewing changes to a project. Read the diff carefully and check each i
 
 ## Intent
 
-{1-2 sentence summary of what was implemented and why}
+{1-2 sentence summary of THIS concern only}
 
 ## Changed files
 
-{list of changed file paths}
+{list of changed file paths for this concern}
 
 ## Diff
 
-{full git diff output}
+{git diff output for this concern's files only}
 
 ## Review Checklist
 
@@ -91,21 +114,25 @@ If no issues found, state: "No issues found." followed by a one-line summary of 
 Do not explain your process. Output findings and summary only.
 ```
 
-## 3. Run the review
+## 4. Run the reviews
+
+Run each prompt through `claude -p`:
 
 ```bash
-claude -p --model claude-sonnet-4-6 < /tmp/cadence-review.md
+claude -p --model claude-sonnet-4-6 < /tmp/cadence-review-$(basename $PWD)-$$-01.md
 ```
+
+**Model selection:**
+- **Sonnet** (default) — for focused, single-concern reviews. Cheap and fast.
+- **Opus** — for a single complex concern with subtle interactions, or when Sonnet's findings seem shallow. The worker judges; this is not automatic.
 
 The reviewer process loads the project's CLAUDE.md and memory automatically. It can read any file in the project for additional context.
 
-If the diff is very large (>500 lines), consider reviewing in chunks — split by file or logical unit, run multiple `claude -p` passes.
+## 5. Present findings
 
-## 4. Present findings
+Collect findings across all concern groups. Show the reviewer output to the user, grouped by concern. Categorize by severity:
 
-Show the reviewer's output to the user. Categorize by severity:
-
-- **Bugs** — fix these before committing. After fixing, offer to re-run the review.
+- **Bugs** — fix these before committing. After fixing, offer to re-run the review for the affected concern.
 - **Concerns** — present to user for judgment. May or may not need action.
 - **Nits** — note them but don't block the commit.
 - **Clean** — proceed to "ready to stage and commit?"
@@ -120,7 +147,7 @@ Re-review after fixes is optional — the user decides. Each re-review is a fres
 
 ## Configuration
 
-- **Model:** defaults to `claude-sonnet-4-6` for cost efficiency. Override by editing the `claude -p` command (e.g., `claude-opus-4-6` for thorough review of critical changes).
+- **Model:** defaults to `claude-sonnet-4-6`. Use `claude-opus-4-6` for complex single-concern reviews.
 - **Scope:** reviews whatever `git diff` shows. Stage files first to control scope.
 - **Project rules:** derived from CLAUDE.md Rules section. More rules = more thorough compliance checks.
 
@@ -129,10 +156,11 @@ Re-review after fixes is optional — the user decides. Each re-review is a fres
 - The reviewer has no access to the current conversation — it starts fresh. This is the point: fresh context escapes the author's confirmation bias.
 - The reviewer CAN read any file in the project (it has full tool access). The diff is the starting point, not the boundary.
 - For non-code projects, the correctness checklist may not apply. The compliance and general checks still provide value.
-- Token cost per review is low with Sonnet (~$0.01–0.05 depending on diff size).
+- Token cost per review is low with Sonnet (~$0.01–0.05 per concern group).
 
 ## Anti-patterns
 
 - **Don't skip review for "small" changes.** Small changes can have large impact. The cost is low enough to run every time.
 - **Don't treat "no issues found" as proof of correctness.** The review catches what it catches. Tests, manual verification, and user judgment still matter.
 - **Don't loop indefinitely on nits.** Fix bugs, consider concerns, note nits. Ship when bugs are fixed.
+- **Don't send a 6-concern diff as one prompt.** Split it. Focused reviews catch more than overloaded ones.
