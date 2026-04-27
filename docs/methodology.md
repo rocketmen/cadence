@@ -96,6 +96,12 @@ Four phases inside a work unit:
 
 Sessions without in-flight work end with: commit + cleanup. No wrap-up ritual needed.
 
+### Mid-session checkpoint
+
+- **`/checkpoint`** — mid-session reflection. Summarizes work so far, checks memory and docs for staleness, proposes next steps. See [`skills/checkpoint/SKILL.md`](../skills/checkpoint/SKILL.md).
+
+Use at natural pause points: after a chunk of work, before deciding what to do next, or when the session has gone long enough to warrant orientation. Non-destructive — reports findings, doesn't modify files.
+
 ### Context pressure
 
 Use qualitative cues, not percentages. Claude flags opportunities:

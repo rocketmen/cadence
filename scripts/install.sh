@@ -69,6 +69,7 @@ link "$REPO_DIR/skills/handover" "$CLAUDE_HOME/skills/handover"
 link "$REPO_DIR/skills/wrap-up" "$CLAUDE_HOME/skills/wrap-up"
 link "$REPO_DIR/skills/next-prompt" "$CLAUDE_HOME/skills/next-prompt"
 link "$REPO_DIR/skills/pre-commit" "$CLAUDE_HOME/skills/pre-commit"
+link "$REPO_DIR/skills/checkpoint" "$CLAUDE_HOME/skills/checkpoint"
 
 echo ""
 echo "Done."
