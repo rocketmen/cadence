@@ -85,7 +85,7 @@ Four phases inside a work unit:
 1. **Research** — understand the problem. Read relevant code, check docs, study legacy counterparts if applicable.
 2. **Plan** — enter plan mode for any of: >3 files, new pattern, cross-repo change, no clear precedent. Multi-session work gets a `project_<feature>.md` memory file.
 3. **Execute** — implement per plan. Track with tasks.
-4. **Review** — run tests, lint, visual check for UI. Propose commit; wait for user approval.
+4. **Review** — run tests, lint, visual check for UI. Run `/review` for independent verification (correctness + compliance via `claude -p`). Propose commit; wait for user approval.
 
 ### Session bookends
 
@@ -105,6 +105,52 @@ Use qualitative cues, not percentages. Claude flags opportunities:
 - Quality degradation (Claude's own judgment)
 
 User decides when to close. For large-context models, natural seams land well before any percentage-based threshold.
+
+---
+
+## Review patterns
+
+Verification happens after Execute, before committing. Four types of verification serve different purposes:
+
+| Type | What | Method | Trigger | Frequency |
+|---|---|---|---|---|
+| **Correctness** | Bugs, edge cases, logic errors | `claude -p` (fresh context) | Pre-commit | Every significant change |
+| **Consistency** | Memory/docs match reality | Subagent (fresh context) | Session start + end | Every session |
+| **Compliance** | Project rules followed | `claude -p` (with correctness) | Pre-commit | Every commit |
+| **Design** | Right approach, right problem | Interactive session | After major deliverables | As needed |
+
+### Independent review via `claude -p`
+
+The worker session generates a structured review prompt and runs it through `claude -p` — a separate Claude process with fresh context. The reviewer loads CLAUDE.md and memory automatically but shares no conversation history with the worker. This escapes the author's confirmation bias: the worker spent 20 minutes convincing itself the code works; a fresh reader traces paths without those assumptions.
+
+The `/review` skill handles correctness + compliance in a single `claude -p` pass. See [`skills/review/SKILL.md`](../skills/review/SKILL.md).
+
+**Cost model:** using a smaller model (e.g., Sonnet) for reviews keeps token cost negligible (~$0.01–0.05 per review). At this cost, running reviews on every commit is practical.
+
+### Consistency checking
+
+Memory drift — where `project_<feature>.md` says one thing but git history shows another — causes the next session to plan based on stale assumptions. `/session-start` includes a freshness check: after surfacing memory, a subagent compares feature state claims against recent git log and flags discrepancies. The subagent runs independently because the main session has already absorbed the memory claims and may be anchored to them.
+
+False positives are acceptable — the goal is surfacing obvious drift, not proving correctness.
+
+### Design review
+
+Design review evaluates whether the approach is right, not just whether the code works. It's the most judgment-heavy type and benefits most from full independence.
+
+**Two-phase pattern:**
+
+1. **Intent sync** (interactive, human involved) — ensure the reviewer understands the goal, constraints, and context. This is where the reviewer asks "why not X instead?" and gets answers.
+2. **Structured checks** (procedural, automatable) — once intent is clear, verify: does implementation match plan? Are there simpler alternatives? Will this scale? Does this follow best practices for the domain? Is there unnecessary coupling?
+
+Phase B resembles a compliance check with research — the gap between design review and compliance narrows as a project matures and accumulates more documented patterns.
+
+**When to invoke:** after major deliverables (new skill, new pattern, architectural decisions). Not every commit — the cost and signal-to-noise ratio don't justify it.
+
+**Method:** separate interactive Claude Code session, or Agent Teams for native multi-agent collaboration. `claude -p` works for a first pass but can't do back-and-forth.
+
+### Domain specificity
+
+Correctness and compliance checks are domain-specific. For coding projects: bugs, best practices, modern patterns, performance. For non-coding projects: different quality standards apply. The `/review` skill reads CLAUDE.md and adapts — project rules drive the compliance checklist, not hardcoded coding assumptions. The correctness checklist in the review prompt template is coding-oriented; non-code projects can skip or adapt it.
 
 ---
 

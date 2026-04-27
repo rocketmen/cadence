@@ -41,6 +41,16 @@ Once intent is known, scan the MEMORY.md index for entries relevant to the state
 
 Read full file content for matched entries — do not rely on MEMORY.md one-line descriptions alone. Tell the user which entries you loaded.
 
+**Verify freshness** of each `project_<feature>.md` that was loaded. Spawn a subagent for this check — the main session has already absorbed the memory claims and may be anchored to them.
+
+Give the subagent:
+- The full content of each `project_<feature>.md` that was loaded
+- The output of `git log --oneline -20`
+
+The subagent's task: compare "Current state" and "Next steps" sections against the git log. If recent commits appear to relate to the feature but aren't reflected in the memory file, flag it as potentially stale. Report discrepancies with evidence (commit hash + memory claim that appears outdated).
+
+This is a lightweight check, not a guarantee. False positives are acceptable — the goal is surfacing obvious drift, not verifying every claim.
+
 ## 5. Propose plan or clarify
 
 Based on intent + surfaced memory:

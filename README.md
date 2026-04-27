@@ -10,6 +10,7 @@ Cadence provides universal [Claude Code skills](https://docs.anthropic.com/en/do
 - **`/handover`** — ends a session with work-in-progress. Verifies clean state, updates memory and docs, captures unstarted scope, generates an opening prompt for the next fresh session.
 - **`/wrap-up`** — closes a session cleanly without generating an opening prompt. Use when the next work is on a different project.
 - **`/next-prompt`** — generates an opening prompt for the next session. Use standalone when the session is already wrapped up.
+- **`/review`** — independent code review before committing. Generates a structured review prompt and runs it through `claude -p` for fresh-context verification.
 
 All skills are project-agnostic. They read context from whatever `CLAUDE.md` and memory the harness auto-loads — no hardcoded project details.
 
@@ -35,7 +36,7 @@ Cadence skills expect the target project to have:
 1. **`CLAUDE.md`** in the project root — project overview, rules, commands, architecture, conventions.
 2. **`.claude/memory/`** directory with a `MEMORY.md` index — dynamic knowledge (user profile, feedback, feature state, references).
 
-See `templates/` for starter files, or use `scripts/init-project.sh` to scaffold a new project. For existing projects with memory already at `~/.claude/projects/`, migration is a separate process (see roadmap).
+See `templates/` for starter files, or use `scripts/init-project.sh` to scaffold a new project. For existing projects, see [`docs/migration.md`](docs/migration.md).
 
 ## The method
 

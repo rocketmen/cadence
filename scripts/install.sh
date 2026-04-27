@@ -68,6 +68,7 @@ link "$REPO_DIR/skills/session-start" "$CLAUDE_HOME/skills/session-start"
 link "$REPO_DIR/skills/handover" "$CLAUDE_HOME/skills/handover"
 link "$REPO_DIR/skills/wrap-up" "$CLAUDE_HOME/skills/wrap-up"
 link "$REPO_DIR/skills/next-prompt" "$CLAUDE_HOME/skills/next-prompt"
+link "$REPO_DIR/skills/review" "$CLAUDE_HOME/skills/review"
 
 echo ""
 echo "Done."

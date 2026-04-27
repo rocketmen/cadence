@@ -56,7 +56,7 @@ Each project stores memory at `.claude/memory/` (version-controlled). A symlink 
 
 ### Skill design
 
-Universal skills (`/session-start`, `/handover`, `/wrap-up`, `/next-prompt`) work by reading whatever CLAUDE.md and MEMORY.md the harness auto-loads. They never reference specific projects, rules, or filenames. Project-specific behavior stays in each project's CLAUDE.md rules.
+Universal skills (`/session-start`, `/handover`, `/wrap-up`, `/next-prompt`, `/review`) work by reading whatever CLAUDE.md and MEMORY.md the harness auto-loads. They never reference specific projects, rules, or filenames. Project-specific behavior stays in each project's CLAUDE.md rules.
 
 ## Workflow
 
@@ -76,7 +76,7 @@ Universal skills (`/session-start`, `/handover`, `/wrap-up`, `/next-prompt`) wor
 | `templates/` | Starter files for new projects |
 | `scripts/` | Automation (init-project, etc.) |
 | `.claude/memory/` | Dynamic learnings — feedback, project state, user profile |
-| **cadence-private** | Personal config, install scripts, memory backup |
+| **cadence-private** | Personal config, install scripts |
 
 **Decision tree for new knowledge:**
 - Immutable project truth or convention → this file
