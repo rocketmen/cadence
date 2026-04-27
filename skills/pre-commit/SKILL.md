@@ -122,7 +122,7 @@ Run each prompt as a **foreground Bash command** with a 3-minute timeout. Do NOT
 claude -p --model claude-sonnet-4-6 < /tmp/cadence-review-$(basename $PWD)-$$-01.md
 ```
 
-Set the Bash tool timeout to 180000ms (3 minutes). The output appears as the Bash tool result. No sleep, no polling, no background — just run it and wait.
+Set the Bash tool timeout based on prompt size: ~60s for small prompts (<100 lines), ~120s for medium, ~180s for large. The output appears as the Bash tool result. No sleep, no polling, no background — just run it and wait.
 
 For multiple concern groups, run each prompt sequentially (one `claude -p` at a time).
 
