@@ -130,11 +130,20 @@ The reviewer process loads the project's CLAUDE.md and memory automatically. It 
 
 ## 5. Present findings
 
-Collect findings across all concern groups. Show the reviewer output to the user, grouped by concern. Categorize by severity:
+Collect findings across all concern groups. Fix bugs, then present a **consolidated end-of-review summary** to the user. This summary is the primary output — individual per-concern summaries during the review are intermediate.
 
-- **Bugs** — fix these before committing. After fixing, offer to re-run the review for the affected concern.
-- **Concerns** — present to user for judgment. May or may not need action.
-- **Nits** — note them but don't block the commit.
+The end-of-review summary should include:
+
+- Total findings across all concerns, by severity
+- What was fixed and what remains for user judgment
+- Per-concern one-line status (clean / fixed / needs user input)
+- Final recommendation: proceed to commit, or user action needed
+
+Severity handling:
+
+- **Bugs** — fix these before the summary. After fixing, offer to re-run the review for the affected concern.
+- **Concerns** — list in the summary for user judgment. May or may not need action.
+- **Nits** — note in the summary but don't block the commit.
 - **Clean** — proceed to "ready to stage and commit?"
 
 Re-review after fixes is optional — the user decides. Each re-review is a fresh `claude -p` invocation with fresh eyes.

@@ -7,7 +7,7 @@ description: Mid-session reflection. Summarizes work so far, checks memory and d
 
 Mid-session take-stock. Run this at natural pause points — after a chunk of work, before deciding what to do next, or when the session has been going long enough that you want to orient.
 
-This is read-only: it surfaces findings and proposes actions, but doesn't modify files or commit. The user decides what to act on.
+Checkpoint surfaces findings, then fixes what it can in the same session — the current session has the best context for updates. Memory and docs fixes are proposed for user approval, not deferred to a new session.
 
 ## 1. Session summary
 
@@ -34,7 +34,7 @@ Read each `project_<feature>.md` that is relevant to this session's work. For ea
 - Should any new memory files be created (new feedback, new feature, new reference)?
 - Does `MEMORY.md` index match the actual memory files?
 
-Report what's stale and what specifically needs updating.
+If anything is stale, propose the specific updates and apply them after user approval. Don't defer memory fixes to a future session — the current session knows what changed.
 
 ### Docs consistency
 
@@ -45,7 +45,7 @@ Check whether this session's work has made any docs stale:
 - **Templates** — if skills or workflows changed, do templates need updating?
 - **README** — does the project description or skill list need updating?
 
-Report anything discussed-but-not-landed that should be captured before the session ends.
+If anything is stale, propose the specific updates and apply them after user approval. Report anything discussed-but-not-landed that should be captured before the session ends.
 
 ## 3. What's next
 
@@ -66,6 +66,6 @@ Brief observations for the user:
 
 ## Notes
 
-- This skill is non-destructive. It reads and reports; it doesn't edit files, update memory, or commit. Those are follow-up actions the user authorizes.
+- Checkpoint proposes memory and docs fixes for user approval, then applies them in the same session. It does not commit — that's a separate step the user authorizes.
 - If the session is short and simple, some checks may be trivial (e.g., no memory files relevant). Skip sections that have nothing to report rather than padding with "nothing to report."
 - The user may invoke this multiple times in a long session. Each invocation covers work since the last checkpoint (or session start).
