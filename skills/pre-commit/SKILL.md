@@ -116,11 +116,15 @@ Do not explain your process. Output findings and summary only.
 
 ## 4. Run the reviews
 
-Run each prompt through `claude -p`:
+Run each prompt as a **foreground Bash command** with a 3-minute timeout. Do NOT background it or poll for output — `claude -p` is blocking and returns its output directly to stdout.
 
 ```bash
 claude -p --model claude-sonnet-4-6 < /tmp/cadence-review-$(basename $PWD)-$$-01.md
 ```
+
+Set the Bash tool timeout to 180000ms (3 minutes). The output appears as the Bash tool result. No sleep, no polling, no background — just run it and wait.
+
+For multiple concern groups, run each prompt sequentially (one `claude -p` at a time).
 
 **Model selection:**
 - **Sonnet** (default) — for focused, single-concern reviews. Cheap and fast.
