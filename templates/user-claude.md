@@ -39,6 +39,7 @@ These principles shape how every session should approach knowledge and tooling:
 - **Fresh sessions preferred** over compact. Use CLAUDE.md + memory + handover opening prompts for deterministic context.
 - **Plan mode** for non-trivial work (new pattern, cross-repo, no clear precedent, multiple files). Project CLAUDE.md may narrow the triggers.
 - **Subagents** — delegate broad codebase exploration to `Explore`, multi-file planning to `Plan`. Keeps main context clean.
+- **Session lifecycle:** `/session-start` at fresh session start. `/checkpoint` for mid-session reflection. At session end: `/handover` (wrap-up + opening prompt), `/wrap-up` (close without prompt), or `/next-prompt` (prompt only). `/pre-commit` for independent review before committing.
 
 ## Where knowledge lives
 

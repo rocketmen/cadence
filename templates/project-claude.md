@@ -57,7 +57,7 @@ This file provides guidance to Claude Code when working with <project-name>.
 
 **RIPER-lite:** Research, Plan, Execute, Review. Plan mode for: >3 files, new pattern, cross-repo change, no clear precedent.
 
-**Session lifecycle:** `/session-start` at fresh session start, `/handover` at session end with WIP.
+**Session lifecycle:** `/session-start` at fresh session start. `/checkpoint` for mid-session reflection. At session end: `/handover` (wrap-up + opening prompt), `/wrap-up` (close without prompt), or `/next-prompt` (prompt only). `/pre-commit` for independent review before committing.
 
 **Subagents:** delegate broad codebase exploration to `Explore`, multi-file planning to `Plan`.
 
