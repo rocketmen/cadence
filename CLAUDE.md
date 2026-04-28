@@ -74,6 +74,7 @@ Universal skills (`/session-start`, `/handover`, `/wrap-up`, `/next-prompt`, `/p
 | `docs/methodology.md` | The Cadence method (authoritative reference) |
 | `skills/` | Universal session lifecycle skills |
 | `templates/` | Starter files for new projects |
+| `hooks/` | User-level Claude Code hook scripts (deployed via cadence-private install) |
 | `scripts/` | Automation (init-project, etc.) |
 | `.claude/memory/` | Dynamic learnings — feedback, project state, user profile |
 | **cadence-private** | Personal config, install scripts |
