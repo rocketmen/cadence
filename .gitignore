@@ -4,5 +4,5 @@
 # Claude Code — local settings
 .claude/settings.local.json
 
-# Claude Code — commit gate flag files
-.claude/.commit-authorized*
+# Claude Code — push gate flag files
+.claude/.push-authorized*
