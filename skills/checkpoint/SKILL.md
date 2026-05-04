@@ -64,6 +64,12 @@ Brief observations for the user:
 - **Watch** — concerns, rough edges, tech debt introduced, things that might bite later
 - **Suggestions** — anything worth raising that doesn't fit above
 
+## 5. Lessons check
+
+Lighter than the full sweep in handover/wrap-up — scoped to work since the last checkpoint (or session start).
+
+If any non-obvious discovery surfaced that would change how a future session approaches similar work, propose it (one line, with lesson type). Skip silently if nothing qualifies. User approves before save.
+
 ## Notes
 
 - Checkpoint proposes memory and docs fixes for user approval, then applies them in the same session. It does not commit — that's a separate step the user authorizes.

@@ -7,7 +7,7 @@ description: End a session with work-in-progress. Verifies clean state, updates 
 
 Run this at the end of a session when work will continue in a fresh session on this project. Goal: zero information loss across the session boundary. Docs and memory carry durable facts; the opening prompt carries ephemeral context.
 
-For partial use: `/wrap-up` runs steps 1–5 only (no opening prompt — use when the next work is on a different project). `/next-prompt` runs step 6 only (use when the session is already wrapped up but you need a prompt).
+For partial use: `/wrap-up` runs steps 1–6 only (no opening prompt — use when the next work is on a different project). `/next-prompt` runs step 7 only (use when the session is already wrapped up but you need a prompt).
 
 Execute the full protocol and present the results. User can skip or modify any step.
 
@@ -58,7 +58,15 @@ Write a short section covering:
 
 The user decides what to pass forward. Not everything here needs to reach the next Claude — some is for the user's own judgment.
 
-## 6. Generate opening prompt
+## 6. Lessons sweep
+
+Scan the session for non-obvious discoveries that would change how a future session approaches similar work. Only surface candidates that clear this bar — skip silently if nothing qualifies.
+
+Propose max 1–2 candidates. For each, state the lesson type (avoidance, efficiency, mental model, constraint, validated pattern) and one-line content. User approves before save.
+
+See `docs/methodology.md` "Lesson capture" for the filter criteria and what does not qualify.
+
+## 7. Generate opening prompt
 
 A copy-pasteable block the user gives the next fresh session. Structure:
 

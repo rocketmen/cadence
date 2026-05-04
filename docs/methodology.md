@@ -102,6 +102,30 @@ Sessions without in-flight work end with: commit + cleanup. No wrap-up ritual ne
 
 Use at natural pause points: after a chunk of work, before deciding what to do next, or when the session has gone long enough to warrant orientation. Non-destructive — reports findings, doesn't modify files.
 
+### Lesson capture
+
+Sessions surface insights that aren't bugs, aren't corrections, and aren't in any doc — but would meaningfully change how a future session approaches similar work. These get lost unless deliberately captured.
+
+**Two modes:**
+
+1. **Inline** (mid-session, proactive) — when a non-obvious discovery surfaces during work, flag it in one sentence and ask the user whether to save. Don't interrupt the flow — note it and continue. This fires rarely (once every few sessions). If it's firing every session, the bar is too low.
+
+2. **Sweep** (session-end, reflective) — at handover/wrap-up/checkpoint, scan the session for insights that weren't flagged inline. Propose max 1–2 candidates. Skip silently if nothing qualifies.
+
+**The filter:** _"Would knowing this earlier have changed how a fresh session approaches similar work?"_ A lesson qualifies only if the answer is clearly yes.
+
+**Five lesson types:**
+
+- **Avoidance** — a wall you hit that future sessions should sidestep
+- **Efficiency** — an approach that worked surprisingly well and would apply to similar future work
+- **Mental model** — "this system actually behaves like X, not like it appears"
+- **Constraint** — boundaries or behaviors not documented anywhere that should inform future design
+- **Validated pattern** — a decomposition or approach that made a problem tractable and generalizes
+
+**What does NOT qualify:** bug fixes (in the code), explicit corrections (already captured as `feedback_*`), code patterns (derivable from reading the code), one-off facts unlikely to recur.
+
+**Where lessons land:** typically `feedback_*.md` (for workflow/approach insights) or `project_*.md` (for system/constraint discoveries). User approves before save.
+
 ### Context pressure
 
 Use qualitative cues, not percentages. Claude flags opportunities:

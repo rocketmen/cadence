@@ -56,6 +56,14 @@ Write a short section covering:
 
 The user decides what to pass forward. Not everything here needs to reach the next Claude — some is for the user's own judgment.
 
+## 6. Lessons sweep
+
+Scan the session for non-obvious discoveries that would change how a future session approaches similar work. Only surface candidates that clear this bar — skip silently if nothing qualifies.
+
+Propose max 1–2 candidates. For each, state the lesson type (avoidance, efficiency, mental model, constraint, validated pattern) and one-line content. User approves before save.
+
+See `docs/methodology.md` "Lesson capture" for the filter criteria and what does not qualify.
+
 ## When to run
 
 - Session is ending but the next work is on a different project (no opening prompt needed)
