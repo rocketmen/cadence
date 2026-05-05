@@ -116,19 +116,39 @@ Do not explain your process. Output findings and summary only.
 
 ## 4. Run the reviews
 
-**CRITICAL: do not set `run_in_background: true` on the Bash tool call.** Backgrounding `claude -p` loses the output — it won't appear in the Bash tool result, and you'll waste time trying to find it. Run it synchronously as a foreground command; the output comes back directly as the tool result.
+Run `claude -p` as a **synchronous foreground command**. The output comes back directly as the Bash tool result.
 
-```bash
-claude -p --model claude-sonnet-4-6 < /tmp/cadence-review-$(basename $PWD)-$$-01.md
+**Exact Bash tool parameters to use:**
+
+| Parameter | Value |
+|---|---|
+| `command` | `claude -p --model "claude-sonnet-4-6[1m]" < /tmp/cadence-review-...-01.md` |
+| `run_in_background` | **DO NOT SET** (omit entirely — defaults to foreground) |
+| `timeout` | Dynamic: ~60000 for small diffs (<100 lines), ~120000 for medium, ~180000 for large |
+
+The command will block for 30–90 seconds. That is expected. Wait for it — the output appears in the tool result when it completes.
+
+**DO NOT background this command.** Here is what happens when you do:
+
+```
+# WRONG — output is lost, you cannot recover it
+⏺ Bash(claude -p ... < /tmp/review.md)
+  ⎿ Running in the background (↓ to manage)    ← OUTPUT LOST
+  ⎿ (timeout 2m)
+
+# You then waste the session trying sleep+cat, Monitor, re-runs...
 ```
 
-Set the Bash tool timeout based on prompt size: ~60000ms for small prompts (<100 lines), ~120000ms for medium, ~180000ms for large. Yes, the command will block for 30–90 seconds — that is expected. Wait for it.
+```bash
+# CORRECT — synchronous, output in tool result
+claude -p --model "claude-sonnet-4-6[1m]" < /tmp/cadence-review-$(basename $PWD)-$$-01.md
+```
 
 For multiple concern groups, run each prompt sequentially (one `claude -p` at a time).
 
 **Model selection:**
-- **Sonnet** (default) — for focused, single-concern reviews. Cheap and fast.
-- **Opus** — for a single complex concern with subtle interactions, or when Sonnet's findings seem shallow. The worker judges; this is not automatic.
+- **Sonnet 1M** (default) — for focused, single-concern reviews. The 1M context handles large diffs plus surrounding file reads without truncation.
+- **Opus** (`"claude-opus-4-6[1m]"`) — for a single complex concern with subtle interactions, or when Sonnet's findings seem shallow. The worker judges; this is not automatic.
 
 The reviewer process loads the project's CLAUDE.md and memory automatically. It can read any file in the project for additional context.
 
@@ -160,7 +180,7 @@ Re-review after fixes is optional — the user decides. Each re-review is a fres
 
 ## Configuration
 
-- **Model:** defaults to `claude-sonnet-4-6`. Use `claude-opus-4-6` for complex single-concern reviews.
+- **Model:** defaults to `claude-sonnet-4-6[1m]`. Use `claude-opus-4-6[1m]` for complex single-concern reviews. Always quote the model ID (brackets are shell globs).
 - **Scope:** reviews whatever `git diff` shows. Stage files first to control scope.
 - **Project rules:** derived from CLAUDE.md Rules section. More rules = more thorough compliance checks.
 
